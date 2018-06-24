@@ -1,14 +1,10 @@
 import {Component} from '@angular/core';
 import {ActionSheetController, AlertController, NavController, NavParams} from 'ionic-angular';
 import {Camera, CameraOptions} from '@ionic-native/camera';
+import {Geolocation, Geoposition} from "@ionic-native/geolocation";
 import {BandcochonProvider} from "../../providers/bandcochon/bandcochon";
 
-/**
- * Generated class for the PhotoPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+
 @Component({
   selector: 'page-photo',
   templateUrl: 'photo.html',
@@ -16,19 +12,31 @@ import {BandcochonProvider} from "../../providers/bandcochon/bandcochon";
 export class PhotoPage {
   pictures = [];
   description = "";
+  position: Geoposition;
 
-  constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public camera: Camera,
-              public actionSheetCtrl: ActionSheetController,
-              public bandcochon: BandcochonProvider,
-              public alertCtrl: AlertController) {
+  constructor(private navCtrl: NavController,
+              private navParams: NavParams,
+              private camera: Camera,
+              private geolocation: Geolocation,
+              private actionSheetCtrl: ActionSheetController,
+              private bandcochon: BandcochonProvider,
+              private alertCtrl: AlertController) {
   }
 
   // On page load, take a picture
   ionViewDidLoad() {
     this.onTakeAPicture();
+    this.geolocation.getCurrentPosition({enableHighAccuracy: true})
+      .then((value: Geoposition) => {
+        this.position = value;
+      }).catch((reason) => {
+        this.displayError(
+          "Erreur pendant la localisation",
+          `Impossible de connaitre votre position car ${reason}`
+        );
+    });
   }
+
 
   /**
    * Test if there's pictures taken
@@ -49,22 +57,29 @@ export class PhotoPage {
       destinationType: this.camera.DestinationType.DATA_URL,
     };
 
-    // FIXME: Get the
-
+    // Get the picture
     this.camera.getPicture(options).then((imgData) => {
-      let base64Img = imgData;
-      this.pictures.push(base64Img);
-    }, (err) => {
-      console.log(err);
-    })
+      this.pictures.push(imgData);
+    }).catch((reason: string) => {
+      this.displayError(
+        "Erreur pendant la prise d'image",
+        `Impossible de prendre une photo car ${reason}`
+      );
+    });
+  }
 
+  displayError(title: string, subTitle: string): void {
+    this.alertCtrl.create({
+      title: title,
+      subTitle: subTitle,
+      buttons: ['OK'],
+    })
   }
 
   /**
    * Display an option dialog (mainly delete)
    *
    * @param picture The picture as a long base64 image
-   * TODO Use indexes
    */
   onDisplayOptions(picture: string): void {
     let actionSheet = this.actionSheetCtrl.create({
@@ -107,7 +122,7 @@ export class PhotoPage {
    * Send all pictures in memory
    */
   onSendPictures() {
-    this.bandcochon.sendPictures(this.pictures, this.description).subscribe((res: Response) => {
+    this.bandcochon.sendPictures(this.pictures, this.position, this.description).subscribe((res: Response) => {
       this.pictures = [];
       this.navCtrl.pop();
     }, (err) => {

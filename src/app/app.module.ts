@@ -8,10 +8,12 @@ import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { PhotoPage} from "../pages/photo/photo";
-
+import { PingPage } from '../pages/ping/ping';
+import { LoginPage } from "../pages/login/login";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Camera } from '@ionic-native/camera';
+import { Geolocation } from '@ionic-native/geolocation';
 import { HttpClientModule } from '@angular/common/http';
 import { BandcochonProvider } from '../providers/bandcochon/bandcochon';
 
@@ -24,6 +26,8 @@ import { BandcochonProvider } from '../providers/bandcochon/bandcochon';
     HomePage,
     TabsPage,
     PhotoPage,
+    PingPage,
+    LoginPage,
   ],
   imports: [
     BrowserModule,
@@ -38,14 +42,16 @@ import { BandcochonProvider } from '../providers/bandcochon/bandcochon';
     HomePage,
     TabsPage,
     PhotoPage,
+    PingPage,
+    LoginPage,
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Camera,
-    BandcochonProvider,
+    Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    BandcochonProvider
+    BandcochonProvider,
   ]
 })
 export class AppModule {}
