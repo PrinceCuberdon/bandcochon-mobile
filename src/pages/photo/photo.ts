@@ -38,10 +38,7 @@ export class PhotoPage {
     this.geolocation.configure(config).subscribe(
       (position: BackgroundGeolocationResponse) => {
         this.position = position;
-        console.log('DEBUG = *******************************************************************************************************');
-        console.log('DEBUG = ' + JSON.stringify(this.position));
-        console.log('DEBUG = *******************************************************************************************************');
-        loading.dismiss();
+        loading.dismiss();        
         this.onTakeAPicture();
         this.geolocation.finish();
       },
