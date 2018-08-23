@@ -1,8 +1,8 @@
-import {Component} from '@angular/core';
-import {ActionSheetController, AlertController, NavController, NavParams} from 'ionic-angular';
-import {Camera, CameraOptions} from '@ionic-native/camera';
-import {Geolocation, Geoposition} from "@ionic-native/geolocation";
-import {BandcochonProvider} from "../../providers/bandcochon/bandcochon";
+import { Component } from '@angular/core';
+import { ActionSheetController, AlertController, NavController, LoadingController } from 'ionic-angular';
+import { Camera, CameraOptions } from '@ionic-native/camera';
+import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation';
+import { BandcochonProvider } from "../../providers/bandcochon/bandcochon";
 
 
 @Component({
@@ -12,29 +12,49 @@ import {BandcochonProvider} from "../../providers/bandcochon/bandcochon";
 export class PhotoPage {
   pictures = [];
   description = "";
-  position: Geoposition;
+  position = null;
 
   constructor(private navCtrl: NavController,
-              private navParams: NavParams,
-              private camera: Camera,
-              private geolocation: Geolocation,
-              private actionSheetCtrl: ActionSheetController,
-              private bandcochon: BandcochonProvider,
-              private alertCtrl: AlertController) {
+    private camera: Camera,
+    private geolocation: BackgroundGeolocation,
+    private actionSheetCtrl: ActionSheetController,
+    private bandcochon: BandcochonProvider,
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController) {
   }
 
   // On page load, take a picture
   ionViewDidLoad() {
-    this.onTakeAPicture();
-    this.geolocation.getCurrentPosition({enableHighAccuracy: true})
-      .then((value: Geoposition) => {
-        this.position = value;
-      }).catch((reason) => {
+    const loading = this.loadingCtrl.create({ content: "Recherche de votre position actuelle par GPS" });
+    loading.present();
+
+    const config: BackgroundGeolocationConfig = {
+      desiredAccuracy: 10,
+      stationaryRadius: 20,
+      distanceFilter: 30,
+      stopOnTerminate: false,
+    };
+
+    this.geolocation.configure(config).subscribe(
+      (position: BackgroundGeolocationResponse) => {
+        this.position = position;
+        console.log('DEBUG = *******************************************************************************************************');
+        console.log('DEBUG = ' + JSON.stringify(this.position));
+        console.log('DEBUG = *******************************************************************************************************');
+        loading.dismiss();
+        this.onTakeAPicture();
+        this.geolocation.finish();
+      },
+      (err) => {
+        loading.dismiss();
+
         this.displayError(
           "Erreur pendant la localisation",
-          `Impossible de connaitre votre position car ${reason}`
+          `Impossible de connaitre votre position car ${err}`
         );
-    });
+        this.geolocation.finish();
+      });
+      this.geolocation.start();
   }
 
 
@@ -122,17 +142,26 @@ export class PhotoPage {
    * Send all pictures in memory
    */
   onSendPictures() {
-    this.bandcochon.sendPictures(this.pictures, this.position, this.description).subscribe((res: Response) => {
-      this.pictures = [];
-      this.navCtrl.pop();
-    }, (err) => {
-      // Display error message
-      this.alertCtrl.create({
-        title: "Erreur",
-        subTitle: "Il fallait bien que ça merde " + err.message,
-        buttons: ['OK'],
-      }).present();
+    const loading = this.loadingCtrl.create({ content: 'Transfert des images' })
+    loading.present();
 
-    });
+    this.bandcochon.sendPictures(this.pictures, this.position, this.description)
+      .subscribe(
+        (res: Response) => {
+          loading.dismiss();
+          this.pictures = [];
+          this.navCtrl.pop();
+        },
+
+        (err) => {
+          // Display error message
+          loading.dismiss();
+          this.alertCtrl.create({
+            title: "Erreur",
+            subTitle: "Il fallait bien que ça merde " + err.message,
+            buttons: ['OK'],
+          }).present();
+        }
+      );
   }
 }

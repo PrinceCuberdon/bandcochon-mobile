@@ -1,16 +1,17 @@
-
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Band cochon</ion-title>
+    <ion-title>Création d'un compte</ion-title>
   </ion-navbar>
 
 </ion-header>
+
 
 <ion-content padding>
   <div class="center">
     <img class="centered-image" src="assets/imgs/logo.png"/>
   </div>
+
 
   <ion-list>
     <ion-item>
@@ -19,17 +20,18 @@
     </ion-item>
 
     <ion-item>
+      <ion-label stacked>Nom de chasseur</ion-label>
+      <ion-input type="email" placeholder="Votre nom de chasseur" [(ngModel)]="username"></ion-input>
+    </ion-item>
+
+    <ion-item>
       <ion-label stacked>Mot de passe</ion-label>
       <ion-input type="password" placeholder="Votre mot de passe" [(ngModel)]="password"></ion-input>
     </ion-item>
   </ion-list>
+
   <div padding-top>
-    <button ion-button  color="primary" block (click)="onLogin()">Connexion</button>
+    <button ion-button color="primary" block (click)="onCreate()">Créer le compte</button>
   </div>
-  <div padding-top>
-    <button ion-button color="" block (click)="onCreateAccount()">Création d'un compte</button>
-  </div>
-  <div padding-top>
-    <button ion-button color="danger" block (click)="onPasswordForgotten()">Mot de passe oublié ?</button>
-  </div>
+
 </ion-content>

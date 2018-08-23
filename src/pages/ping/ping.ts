@@ -1,9 +1,8 @@
-import {Component} from '@angular/core';
-import {AlertController, IonicPage, NavController, NavParams, Platform} from 'ionic-angular';
-import {BandcochonProvider} from "../../providers/bandcochon/bandcochon";
-import {TabsPage} from "../tabs/tabs";
-import {Geolocation, GeolocationOptions} from '@ionic-native/geolocation';
-import {LoginPage} from "../login/login";
+import { Component } from '@angular/core';
+import { AlertController, IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { BandcochonProvider } from "../../providers/bandcochon/bandcochon";
+import { TabsPage } from "../tabs/tabs";
+import { LoginPage } from "../login/login";
 
 @IonicPage()
 @Component({
@@ -13,16 +12,16 @@ import {LoginPage} from "../login/login";
 export class PingPage {
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public bandcochon: BandcochonProvider,
-              public alertCtrl: AlertController,
-              public platform: Platform) {
+    public navParams: NavParams,
+    public bandcochon: BandcochonProvider,
+    public alertCtrl: AlertController,
+    public platform: Platform) {
   }
 
   ionViewDidLoad() {
-    this.bandcochon.ping().then((value:boolean) => {
+    this.bandcochon.ping().then((value: boolean) => {
       this.navCtrl.setRoot(TabsPage);
-    }).catch((value:boolean) => {
+    }).catch((value: boolean) => {
       if (value === true) {
         this.navCtrl.setRoot(LoginPage);
       } else {
