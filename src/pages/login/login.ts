@@ -3,6 +3,8 @@ import { IonicPage, LoadingController, NavController, NavParams, AlertController
 import { BandcochonProvider } from "../../providers/bandcochon/bandcochon";
 import { TabsPage } from '../tabs/tabs';
 import { CreateAccountPage } from '../create-account/create-account';
+import { ForgottenPasswordPage } from '../forgotten-password/forgotten-password';
+
 
 @IonicPage()
 @Component({
@@ -29,24 +31,24 @@ export class LoginPage {
     loading.present();
 
     this.bandcochon.login(this.email, this.password)
-    // Success
-    .then(() => {
-      this.navCtrl.setRoot(TabsPage);
-    })
+      // Success
+      .then(() => {
+        this.navCtrl.setRoot(TabsPage);
+      })
 
-    // On error
-    .catch((err) => {
-      this.alertCtrl.create({
-        title: "Erreur d'identifiant",
-        subTitle: "email ou mot de passe non reconnu.",
-        buttons: ['OK'],
-      }).present();
-    })
-    
-    // Always
-    .then(() => {
-      loading.dismiss();
-    });
+      // On error
+      .catch((err) => {
+        this.alertCtrl.create({
+          title: "Erreur d'identifiant",
+          subTitle: "email ou mot de passe non reconnu.",
+          buttons: ['OK'],
+        }).present();
+      })
+
+      // Always
+      .then(() => {
+        loading.dismiss();
+      });
   }
 
   /** 
@@ -54,5 +56,9 @@ export class LoginPage {
    */
   onCreateAccount() {
     this.navCtrl.push(CreateAccountPage);
+  }
+
+  onPasswordForgotten() {
+    this.navCtrl.push(ForgottenPasswordPage);
   }
 }

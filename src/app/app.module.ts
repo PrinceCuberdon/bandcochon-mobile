@@ -17,6 +17,7 @@ import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import { HttpClientModule } from '@angular/common/http';
 import { BandcochonProvider } from '../providers/bandcochon/bandcochon';
 import { CreateAccountPage } from '../pages/create-account/create-account';
+import { ForgottenPasswordPage } from '../pages/forgotten-password/forgotten-password';
 
 @NgModule({
 
@@ -30,6 +31,7 @@ import { CreateAccountPage } from '../pages/create-account/create-account';
     PingPage,
     LoginPage,
     CreateAccountPage,
+    ForgottenPasswordPage,
   ],
   imports: [
     BrowserModule,
@@ -47,6 +49,7 @@ import { CreateAccountPage } from '../pages/create-account/create-account';
     PingPage,
     LoginPage,
     CreateAccountPage,
+    ForgottenPasswordPage,
   ],
   providers: [
     StatusBar,

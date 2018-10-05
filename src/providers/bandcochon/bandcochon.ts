@@ -15,6 +15,8 @@ export class BandcochonProvider {
   static LOGIN = BandcochonProvider.ENDPOINT + 'auth/login/';
   static LOGOUT = BandcochonProvider.ENDPOINT + 'auth/logout/';
   static CREATE_ACCOUNT = BandcochonProvider.ENDPOINT + 'auth/create/';
+  static FORGOTTEN_PASSWORD = BandcochonProvider.ENDPOINT + 'auth/forgotten/';
+  static RECOVER_PASSWORD = BandcochonProvider.ENDPOINT + 'auth/recover/';
 
   token: string;
 
@@ -103,6 +105,46 @@ export class BandcochonProvider {
           (err) => {
             reject(err);
           })
+    });
+  }
+
+  /**
+   * Ask to send a code
+   * 
+   * @param email The user email
+   */
+  forgotten(email: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.http.post(BandcochonProvider.FORGOTTEN_PASSWORD, { email })
+        .subscribe(
+          (value: ISimpleResponse) => {
+            resolve(true);
+          },
+
+          (err) => {
+            reject(false);
+          }
+        )
+    });
+  }
+
+  /*
+   * Send the code to recover the code
+   * 
+   * @param code The sended user code
+   */
+  sendCode(code: string, email: string, password: string, confirm: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.http.post(BandcochonProvider.RECOVER_PASSWORD, { code, email, password, confirm })
+        .subscribe(
+          (value) => {
+            resolve(true);
+          },
+
+          (err) => {
+            reject(false);
+          }
+        );
     });
   }
 }
