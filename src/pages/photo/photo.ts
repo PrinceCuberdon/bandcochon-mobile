@@ -90,7 +90,7 @@ export class PhotoPage {
       title: title,
       subTitle: subTitle,
       buttons: ['OK'],
-    })
+    });
   }
 
   /**
