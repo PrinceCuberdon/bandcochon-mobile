@@ -3,6 +3,7 @@ import { AlertController, NavController, NavParams, Platform } from 'ionic-angul
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { BandcochonProvider } from "../providers/bandcochon/bandcochon";
 import { LoginPage } from '../login/login';
+import { TabsPage } from '../tabs/tabs';
 
 
 @Component({
@@ -25,7 +26,23 @@ export class PingPage {
 
   ionViewDidLoad() {
     this.bandcochon.ping()
-      .then((value: boolean) => { this.searchGeolocation() })
+      .then((value: boolean) => {
+        this.searchGeolocation()
+
+          .then(() => {
+            if (value === false) {
+              this.navCtrl.setRoot(LoginPage);
+            } else {
+              this.navCtrl.setRoot(TabsPage);
+            }
+          })
+
+          .catch(() => {
+            alert('Critcal error : Aborting');
+            this.platform.exitApp();
+          });
+      })
+
       .catch((value: boolean) => {
         if (value === true) {
           this.searchGeolocation();
@@ -34,7 +51,7 @@ export class PingPage {
         }
       });
   }
-  
+
   private displayErrorThenExit(msg: string): void {
     this.alertCtrl.create({
       title: "Erreur",
@@ -78,25 +95,33 @@ export class PingPage {
   /** 
    * Ensure we can publish the picture 
    */
-  private searchGeolocation(): void {
+  private searchGeolocation(): Promise<void> {
     this.loadingMessage = "Recherche de votre position actuelle par GPS";
 
-    this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((pos: Geoposition) => {
-      if (pos['coords']) {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-        this.loadingMessage = 'Position acquise.';
+    return new Promise((resolve, reject) => {
+      this.geolocation.getCurrentPosition({ enableHighAccuracy: true })
+        .then((pos: Geoposition) => {
+          if (pos['coords']) {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            this.loadingMessage = 'Position acquise.';
 
-        this.bandcochon.ensureGeolocation({ lat, lng }).then((value) => {
-          this.navCtrl.setRoot(LoginPage);
-        }).catch((err) => {
-          alert(JSON.stringify(err));
-          this.displayWrongGeolocationError();
+            this.bandcochon.ensureGeolocation({ lat, lng })
+              .then(() => {
+                resolve();
+              })
+
+              .catch(() => {
+                this.displayWrongGeolocationError();
+                reject();
+              })
+          }
         })
-      }
-    }).catch((error) => {
-      this.displayGeolocationDeviceError(error);
-    });
 
+        .catch((error) => {
+          this.displayGeolocationDeviceError(error);
+          reject();
+        });
+    });
   }
 }

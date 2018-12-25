@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs/Observable";
 import { Geoposition } from '@ionic-native/geolocation';
@@ -27,7 +27,7 @@ export class BandcochonProvider {
   token: string;
 
   constructor(public http: HttpClient) {
-    // this.getToken().then((t) => this.token = t).catch((err) => this.token = null);
+    this.token = localStorage.getItem('token');
   }
 
   /**
@@ -41,11 +41,9 @@ export class BandcochonProvider {
   sendPictures(pictures: Array<string>, position: Geoposition, comment: string): Observable<any> {
     let latitude = position.coords.latitude;
     let longitude = position.coords.longitude;
-    
 
     return this.http.post(BandcochonProvider.IMAGES,
-      { pictures, comment, latitude, longitude },
-      { headers: { 'x-auth-token': this.token } });
+      { pictures, comment, latitude, longitude }, { headers: { 'x-auth-token': this.token } });
   }
 
   /**
@@ -55,17 +53,13 @@ export class BandcochonProvider {
    */
   ping(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      const headers = new HttpHeaders();
-      headers.append("Accept", 'application/json');
-      headers.append('Content-Type', 'application/json');
-     
-     const options = { headers };
-
-     this.http.get(BandcochonProvider.PING, options)
+      this.http.get(BandcochonProvider.PING, { headers: { 'x-auth-token': this.token } })
         .subscribe(
           (value: ISimpleResponse) => {
+            let result = this.token == value.token;
             this.token = value.token;
-            resolve(true);
+
+            resolve(result);
           },
 
           (err) => {
@@ -108,6 +102,7 @@ export class BandcochonProvider {
         .subscribe(
           (value: ISimpleResponse) => {
             this.token = value.token;
+            localStorage.setItem('token', this.token);
             resolve(value.token);
           },
 
