@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
-import { BandcochonProvider } from '../../providers/bandcochon/bandcochon';
+import { BandcochonProvider } from '../providers/bandcochon/bandcochon';
 
 
 @Component({

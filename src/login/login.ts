@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, LoadingController, NavController, NavParams, AlertController } from 'ionic-angular';
-import { BandcochonProvider } from "../../providers/bandcochon/bandcochon";
+import { BandcochonProvider } from "../providers/bandcochon/bandcochon";
 import { TabsPage } from '../tabs/tabs';
 import { CreateAccountPage } from '../create-account/create-account';
 import { ForgottenPasswordPage } from '../forgotten-password/forgotten-password';
 
 
-@IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',

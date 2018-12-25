@@ -1,10 +1,15 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs/Observable";
-import { BackgroundGeolocationResponse } from '@ionic-native/background-geolocation';
+import { Geoposition } from '@ionic-native/geolocation';
 
 interface ISimpleResponse {
   token: string;
+}
+
+interface Position {
+  lat: number;
+  lng: number;
 }
 
 @Injectable()
@@ -17,6 +22,7 @@ export class BandcochonProvider {
   static CREATE_ACCOUNT = BandcochonProvider.ENDPOINT + 'auth/create/';
   static FORGOTTEN_PASSWORD = BandcochonProvider.ENDPOINT + 'auth/forgotten/';
   static RECOVER_PASSWORD = BandcochonProvider.ENDPOINT + 'auth/recover/';
+  static SHOULD_POST = BandcochonProvider.ENDPOINT + 'ping/ensure_location/';
 
   token: string;
 
@@ -28,18 +34,18 @@ export class BandcochonProvider {
    * Send the images to the endpoint
    *
    * @param {Array<string>} pictures The list of pictures
+   * @param {Geoposition} position The device position in decimal
    * @param {string} comment The description
    * @returns {Observable<any>}
    */
-  sendPictures(pictures: Array<string>, position: BackgroundGeolocationResponse, comment: string): Observable<any> {
-    let latitude = position.latitude;
-    let longitude = position.longitude;
+  sendPictures(pictures: Array<string>, position: Geoposition, comment: string): Observable<any> {
+    let latitude = position.coords.latitude;
+    let longitude = position.coords.longitude;
+    
 
     return this.http.post(BandcochonProvider.IMAGES,
       { pictures, comment, latitude, longitude },
-      {
-        headers: { 'x-auth-token': this.token }
-      });
+      { headers: { 'x-auth-token': this.token } });
   }
 
   /**
@@ -49,7 +55,13 @@ export class BandcochonProvider {
    */
   ping(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      this.http.get(BandcochonProvider.PING)
+      const headers = new HttpHeaders();
+      headers.append("Accept", 'application/json');
+      headers.append('Content-Type', 'application/json');
+     
+     const options = { headers };
+
+     this.http.get(BandcochonProvider.PING, options)
         .subscribe(
           (value: ISimpleResponse) => {
             this.token = value.token;
@@ -66,6 +78,18 @@ export class BandcochonProvider {
     });
   }
 
+  /**
+   * Should the user can post at his location
+   */
+  ensureGeolocation(position: Position): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.http.post(BandcochonProvider.SHOULD_POST, { position })
+        .subscribe(
+          (value) => { resolve(true) },
+          (err) => { reject(err) }
+        )
+    });
+  }
 
   /**
    * Try to signin
@@ -128,10 +152,14 @@ export class BandcochonProvider {
     });
   }
 
-  /*
+  /**
    * Send the code to recover the code
    * 
    * @param code The sended user code
+   * @param email The user email
+   * @param password The user password
+   * @param confirm The user password (again)
+   * @returns A promise with the server response
    */
   sendCode(code: string, email: string, password: string, confirm: string): Promise<boolean> {
     return new Promise((resolve, reject) => {

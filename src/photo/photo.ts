@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { ActionSheetController, AlertController, NavController, LoadingController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation';
-import { BandcochonProvider } from "../../providers/bandcochon/bandcochon";
+import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+
+import { BandcochonProvider } from "../providers/bandcochon/bandcochon";
 
 
 @Component({
@@ -14,44 +15,34 @@ export class PhotoPage {
   description = "";
   position = null;
 
-  constructor(private navCtrl: NavController,
+  constructor(
+    private navCtrl: NavController,
     private camera: Camera,
-    private geolocation: BackgroundGeolocation,
+    private geolocation: Geolocation,
     private actionSheetCtrl: ActionSheetController,
     private bandcochon: BandcochonProvider,
     private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController) {
-  }
+    private loadingCtrl: LoadingController,
+  ) { }
 
   // On page load, take a picture
   ionViewDidLoad() {
     const loading = this.loadingCtrl.create({ content: "Recherche de votre position actuelle par GPS" });
     loading.present();
 
-    const config: BackgroundGeolocationConfig = {
-      desiredAccuracy: 10,
-      stationaryRadius: 20,
-      distanceFilter: 30,
-      stopOnTerminate: false,
-    };
-
-    this.geolocation.configure(config).subscribe(
-      (position: BackgroundGeolocationResponse) => {
-        this.position = position;
-        loading.dismiss();        
-        this.onTakeAPicture();
-        this.geolocation.finish();
-      },
-      (err) => {
+    this.geolocation.getCurrentPosition({ enableHighAccuracy: true })
+      .then((pos: Geoposition) => {
         loading.dismiss();
+        this.position = pos;
+        this.onTakeAPicture();
+      })
 
+      .catch((err) => {
         this.displayError(
           "Erreur pendant la localisation",
           `Impossible de connaitre votre position car ${err}`
         );
-        this.geolocation.finish();
       });
-      this.geolocation.start();
   }
 
 
@@ -75,14 +66,18 @@ export class PhotoPage {
     };
 
     // Get the picture
-    this.camera.getPicture(options).then((imgData) => {
-      this.pictures.push(imgData);
-    }).catch((reason: string) => {
-      this.displayError(
-        "Erreur pendant la prise d'image",
-        `Impossible de prendre une photo car ${reason}`
-      );
-    });
+    this.camera.getPicture(options)
+
+      .then((imgData) => {
+        this.pictures.push(imgData);
+      })
+
+      .catch((reason: string) => {
+        this.displayError(
+          "Erreur pendant la prise d'image",
+          `Impossible de prendre une photo car ${reason}`
+        );
+      });
   }
 
   displayError(title: string, subTitle: string): void {
@@ -160,5 +155,6 @@ export class PhotoPage {
           }).present();
         }
       );
+
   }
 }

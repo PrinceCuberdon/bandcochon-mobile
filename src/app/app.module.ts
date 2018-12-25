@@ -1,23 +1,24 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { Geolocation } from '@ionic-native/geolocation';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { MyApp } from './app.component';
-
-import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
-import { HomePage } from '../pages/home/home';
-import { TabsPage } from '../pages/tabs/tabs';
-import { PhotoPage } from "../pages/photo/photo";
-import { PingPage } from '../pages/ping/ping';
-import { LoginPage } from "../pages/login/login";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Camera } from '@ionic-native/camera';
-import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import { HttpClientModule } from '@angular/common/http';
+
+import { MyApp } from './app.component';
+
+import { AboutPage } from '../about/about';
+import { ContactPage } from '../contact/contact';
+import { HomePage } from '../home/home';
+import { TabsPage } from '../tabs/tabs';
+import { PhotoPage } from "../photo/photo";
+import { PingPage } from '../ping/ping';
+import { LoginPage } from "../login/login";
+import { ForgottenPasswordPage } from '../forgotten-password/forgotten-password';
 import { BandcochonProvider } from '../providers/bandcochon/bandcochon';
-import { CreateAccountPage } from '../pages/create-account/create-account';
-import { ForgottenPasswordPage } from '../pages/forgotten-password/forgotten-password';
+import { CreateAccountPage } from '../create-account/create-account';
 
 @NgModule({
 
@@ -55,7 +56,7 @@ import { ForgottenPasswordPage } from '../pages/forgotten-password/forgotten-pas
     StatusBar,
     SplashScreen,
     Camera,
-    BackgroundGeolocation,
+    Geolocation,    
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     BandcochonProvider,
   ]

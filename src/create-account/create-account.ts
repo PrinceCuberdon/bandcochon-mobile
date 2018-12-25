@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import { BandcochonProvider } from '../../providers/bandcochon/bandcochon';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { BandcochonProvider } from '../providers/bandcochon/bandcochon';
 
 
-@IonicPage()
 @Component({
   selector: 'page-create-account',
   templateUrl: 'create-account.html',
