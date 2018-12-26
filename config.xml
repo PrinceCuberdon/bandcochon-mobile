@@ -84,8 +84,9 @@
     <plugin name="cordova-plugin-camera" spec="^4.0.3" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <plugin name="cordova-plugin-geolocation" spec="4.0.1">
-        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="Pour vous positionner" />
+        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="Nous utilisons la localisation GPS pour savoir où se trouve la cochonnerie que vous postez" />
     </plugin>
+    <allow-navigation href="http://192.168.1.20:8100" />
     <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
         <string>Nous utilisons la localisation GPS pour savoir où se trouve la cochonnerie que vous postez</string>
     </edit-config>

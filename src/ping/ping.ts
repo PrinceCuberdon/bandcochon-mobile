@@ -26,29 +26,31 @@ export class PingPage {
 
   ionViewDidLoad() {
     this.bandcochon.ping()
-      .then((value: boolean) => {
-        this.searchGeolocation()
-
-          .then(() => {
-            if (value === false) {
-              this.navCtrl.setRoot(LoginPage);
-            } else {
-              this.navCtrl.setRoot(TabsPage);
-            }
-          })
-
-          .catch(() => {
-            alert('Critcal error : Aborting');
-            this.platform.exitApp();
-          });
+      .then(() => {
+        this.changePageOnSuccess();
       })
 
       .catch((value: boolean) => {
         if (value === true) {
-          this.searchGeolocation();
+          this.changePageOnSuccess();
         } else {
           this.displayPingError();
         }
+      });
+  }
+
+  private changePageOnSuccess() {
+    const connected: boolean = this.bandcochon.isConnected();
+
+    this.searchGeolocation()
+      .then(() => {
+        const page = connected === true ? TabsPage : LoginPage;
+        this.navCtrl.setRoot(page);
+      })
+      
+      .catch(() => {
+        alert('Critcal error : Aborting');
+        this.platform.exitApp();
       });
   }
 

@@ -10,7 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MyApp } from './app.component';
 
 import { AboutPage } from '../about/about';
-import { ContactPage } from '../contact/contact';
+import { PreferencesPage } from '../preferences/preferences';
 import { HomePage } from '../home/home';
 import { TabsPage } from '../tabs/tabs';
 import { PhotoPage } from "../photo/photo";
@@ -25,7 +25,7 @@ import { CreateAccountPage } from '../create-account/create-account';
   declarations: [
     MyApp,
     AboutPage,
-    ContactPage,
+    PreferencesPage,
     HomePage,
     TabsPage,
     PhotoPage,
@@ -43,7 +43,7 @@ import { CreateAccountPage } from '../create-account/create-account';
   entryComponents: [
     MyApp,
     AboutPage,
-    ContactPage,
+    PreferencesPage,
     HomePage,
     TabsPage,
     PhotoPage,

@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs/Observable";
 import { Geoposition } from '@ionic-native/geolocation';
@@ -24,7 +24,7 @@ export class BandcochonProvider {
   static RECOVER_PASSWORD = BandcochonProvider.ENDPOINT + 'auth/recover/';
   static SHOULD_POST = BandcochonProvider.ENDPOINT + 'ping/ensure_location/';
 
-  token: string;
+  token: string = null;
 
   constructor(public http: HttpClient) {
     this.token = localStorage.getItem('token');
@@ -53,7 +53,7 @@ export class BandcochonProvider {
    */
   ping(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      this.http.get(BandcochonProvider.PING, { headers: { 'x-auth-token': this.token } })
+      this.http.get(BandcochonProvider.PING, { headers: { 'x-auth-token': this.token || '' } })
         .subscribe(
           (value: ISimpleResponse) => {
             let result = this.token == value.token;
@@ -169,5 +169,14 @@ export class BandcochonProvider {
           }
         );
     });
+  }
+
+  /**
+   * Test if the user has a token or not
+   * 
+   * @returns True if yes, False elsewhere
+   */
+  isConnected() : boolean {
+    return this.token !== null;
   }
 }
