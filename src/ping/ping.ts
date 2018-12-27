@@ -48,9 +48,8 @@ export class PingPage {
         this.navCtrl.setRoot(page);
       })
       
-      .catch(() => {
-        alert('Critcal error : Aborting');
-        this.platform.exitApp();
+      .catch((err) => {
+        this.displayWrongGeolocationError();
       });
   }
 
@@ -114,7 +113,6 @@ export class PingPage {
               })
 
               .catch(() => {
-                this.displayWrongGeolocationError();
                 reject();
               })
           }
