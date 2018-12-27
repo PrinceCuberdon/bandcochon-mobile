@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, List } from 'ionic-angular';
 import { BandcochonProvider } from '../providers/bandcochon/bandcochon';
-
 
 @Component({
   selector: 'page-create-account',
@@ -18,58 +17,62 @@ export class CreateAccountPage {
     private bandcochon: BandcochonProvider) {
   }
 
-  ionViewDidLoad() {
-
-  }
-
   onCreate() {
-    let email = this.email.trim();
-    let username = this.username.trim();
-    let password = this.password.trim();
+    this.cleanEntries();
 
-    if (!this.validateEmail(email)) {
-      this.alertCtrl.create({
-        title: "Erreur",
-        subTitle: "Votre email n'est pas valide",
-        buttons: ['OK']
-      }).present();
+    if (!this.validateEmail(this.email)) {
+      this.displayError('Erreur', "Votre email n'est pas valide");
       return;
     }
 
-    this.bandcochon.createAccount(email, password, username)
+    if (this.password.length < 6) {
+      this.displayError('Erreur', 'Votre mot de passe doit faire au minimum 6 caractères.');
+      return;
+    }
+
+    this.bandcochon.createAccount(this.email, this.password, this.username)
 
       .then(status => {
-        this.alertCtrl.create({
-          title: "Création du compte",
-          subTitle: "Vous venez de recevoir un email pour confirmer la création de votre compte. Un fois validé, vous pourrez vous connecter avec l'application.",
-          buttons: ["OK"]
-        })
-        .present()
-        .then(() => {
-          this.navCtrl.popToRoot();
-        })
-        .catch(() => { });
+        this.displayError("Création du compte",
+          "Vous venez de recevoir un email pour confirmer la création de votre compte." +
+          " Un fois validé, vous pourrez vous connecter avec l'application.")
+          .then(() => {
+            this.navCtrl.popToRoot();
+          })
+          .catch(() => { });
       })
 
       .catch(err => {
-        let message = "";
+        let message = (() => {
+          if (err.status == 403) {
+            return "Impossible de créer votre compte, car l'adresse email ou le nom de chasseur est déjà pris.";
+          } else {
+            return `Impossible de créer votre compte. Error:  ${err.message}`;
+          }
+        })();
 
-        if (err.status == 403) {
-          message = "Impossible de créer votre compte, car l'adresse email ou le nom de chasseur est déjà pris.";
-        } else {
-          message = `Impossible de créer votre compte. Error:  ${err.message}`;
-        }
-
-        this.alertCtrl.create({
-          title: "Erreur",
-          subTitle: message,
-          buttons: ["OK"]
-        }).present();
+        this.displayError('Erreur', message);
       });
+
   }
 
   private validateEmail(email: string): boolean {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
+  }
+
+  private cleanEntries() {
+    this.email = this.email.trim();
+    this.username = this.username.trim();
+    this.password = this.password.trim();
+  }
+
+
+  private displayError(title: string, subTitle: string): Promise<any> {
+    return this.alertCtrl.create({
+      title: title,
+      subTitle: subTitle,
+      buttons: ["OK"]
+    }).present();
   }
 }
