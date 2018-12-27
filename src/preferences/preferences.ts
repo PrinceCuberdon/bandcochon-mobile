@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { Events } from 'ionic-angular';
+import { BandcochonProvider } from '../providers/bandcochon/bandcochon';
 
 @Component({
   selector: 'page-preferences',
@@ -7,8 +8,15 @@ import { NavController } from 'ionic-angular';
 })
 export class PreferencesPage {
 
-  constructor(public navCtrl: NavController) {
+  constructor(
+    private events: Events,
+    private bandcochon: BandcochonProvider) { }
 
+  logout() {
+    console.log('lougout from servier');
+    this.bandcochon.logout();
+    console.log('Sending event');
+    this.events.publish('user:logout');
+    console.log('The event is sended');
   }
-
 }

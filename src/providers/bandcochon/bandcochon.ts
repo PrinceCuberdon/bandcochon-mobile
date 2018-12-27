@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs/Observable";
 import { Geoposition } from '@ionic-native/geolocation';
+import { Events } from 'ionic-angular';
 
 interface ISimpleResponse {
   token: string;
@@ -26,7 +27,9 @@ export class BandcochonProvider {
 
   token: string = null;
 
-  constructor(public http: HttpClient) {
+  constructor(
+    public http: HttpClient,
+    private events: Events) {
     this.token = localStorage.getItem('token');
   }
 
@@ -57,8 +60,6 @@ export class BandcochonProvider {
         .subscribe(
           (value: ISimpleResponse) => {
             let result = this.token == value.token;
-            this.token = value.token;
-
             resolve(result);
           },
 
@@ -101,9 +102,8 @@ export class BandcochonProvider {
       )
         .subscribe(
           (value: ISimpleResponse) => {
-            this.token = value.token;
-            localStorage.setItem('token', this.token);
-            resolve(value.token);
+            this.saveToken(value.token);
+            resolve(this.token);
           },
 
           (err) => {
@@ -176,7 +176,25 @@ export class BandcochonProvider {
    * 
    * @returns True if yes, False elsewhere
    */
-  isConnected() : boolean {
+  isConnected(): boolean {
     return this.token !== null;
+  }
+
+  /**
+   * Disconnect from service. Call the server then remove the token
+   * 
+   * @returns {Promise<void>} A promise 
+   */
+  logout() {
+    this.http.delete(BandcochonProvider.LOGOUT, { headers: { 'x-auth-token': this.token } })
+      .subscribe(
+        (value: ISimpleResponse) => {
+          this.saveToken(value.token);
+        });
+  }
+
+  saveToken(token: string): void {
+    this.token = token;
+    localStorage.setItem('token', this.token);
   }
 }

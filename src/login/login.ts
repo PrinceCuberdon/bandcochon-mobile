@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, LoadingController, NavController, NavParams, AlertController } from 'ionic-angular';
+import { LoadingController, NavController, NavParams, AlertController } from 'ionic-angular';
 import { BandcochonProvider } from "../providers/bandcochon/bandcochon";
 import { TabsPage } from '../tabs/tabs';
 import { CreateAccountPage } from '../create-account/create-account';

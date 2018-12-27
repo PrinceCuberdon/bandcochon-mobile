@@ -27,24 +27,24 @@ export class PingPage {
   ionViewDidLoad() {
     this.bandcochon.ping()
       .then(() => {
-        this.changePageOnSuccess();
+        this.changePageOnSuccess(true);
       })
 
       .catch((value: boolean) => {
         if (value === true) {
-          this.changePageOnSuccess();
+          this.changePageOnSuccess(false);
         } else {
           this.displayPingError();
         }
       });
   }
 
-  private changePageOnSuccess() {
+  private changePageOnSuccess(value: boolean) {
     const connected: boolean = this.bandcochon.isConnected();
 
     this.searchGeolocation()
       .then(() => {
-        const page = connected === true ? TabsPage : LoginPage;
+        const page = (connected && value) === true ? TabsPage : LoginPage;
         this.navCtrl.setRoot(page);
       })
       

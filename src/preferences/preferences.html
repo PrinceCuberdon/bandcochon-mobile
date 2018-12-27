@@ -6,12 +6,16 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
-  <ion-list>
-    <ion-list-header>Follow us on Twitter</ion-list-header>
-    <ion-item>
-      <ion-icon name="ionic" item-start></ion-icon>
-      @ionicframework
-    </ion-item>
-  </ion-list>
+<ion-content padding>
+  <div class="center">
+    <img class="centered-image" src="assets/imgs/logo.png" />
+  </div>
+
+  <div>
+    <button ion-button color="primary" block large (tap)="logout()">Déconnexion</button>
+
+    <p small>En vous déconnectant de Band Cochon vous devrez vous
+      reconnecter la prochaine fois que vous lancez l'application.
+    </p>
+  </div>
 </ion-content>
