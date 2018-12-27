@@ -47,7 +47,7 @@ export class PingPage {
         const page = (connected && value) === true ? TabsPage : LoginPage;
         this.navCtrl.setRoot(page);
       })
-      
+
       .catch((err) => {
         this.displayWrongGeolocationError();
       });
@@ -100,9 +100,11 @@ export class PingPage {
     this.loadingMessage = "Recherche de votre position actuelle par GPS";
 
     return new Promise((resolve, reject) => {
-      this.geolocation.getCurrentPosition({ enableHighAccuracy: true })
-        .then((pos: Geoposition) => {
+      const subscription = this.geolocation.watchPosition({ timeout: 30000, enableHighAccuracy: true })
+        .subscribe((pos: Geoposition) => {
           if (pos['coords']) {
+            subscription.unsubscribe();
+            
             const lat = pos.coords.latitude;
             const lng = pos.coords.longitude;
             this.loadingMessage = 'Position acquise.';
@@ -115,13 +117,17 @@ export class PingPage {
               .catch(() => {
                 reject();
               })
-          }
-        })
 
-        .catch((error) => {
-          this.displayGeolocationDeviceError(error);
-          reject();
-        });
+              .then(() => {
+                this.geolocation
+              })
+          }
+        },
+
+          (error) => {
+            this.displayGeolocationDeviceError(error);
+            reject();
+          });
     });
   }
 }

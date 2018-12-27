@@ -86,9 +86,18 @@
     <plugin name="cordova-plugin-geolocation" spec="4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="Nous utilisons la localisation GPS pour savoir où se trouve la cochonnerie que vous postez" />
     </plugin>
-    <allow-navigation href="http://192.168.1.20:8100" />
     <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
         <string>Nous utilisons la localisation GPS pour savoir où se trouve la cochonnerie que vous postez</string>
     </edit-config>
+    <plugin name="cordova-plugin-mauron85-background-geolocation" spec="~2.3.6">
+        <variable name="GOOGLE_PLAY_SERVICES_VERSION" value="11+" />
+        <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="23+" />
+        <variable name="ICON" value="@mipmap/icon" />
+        <variable name="SMALL_ICON" value="@mipmap/icon" />
+        <variable name="ACCOUNT_NAME" value="@string/app_name" />
+        <variable name="ACCOUNT_LABEL" value="@string/app_name" />
+        <variable name="ACCOUNT_TYPE" value="$PACKAGE_NAME.account" />
+        <variable name="CONTENT_AUTHORITY" value="$PACKAGE_NAME" />
+    </plugin>
     <engine name="android" spec="7.1.4" />
 </widget>

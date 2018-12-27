@@ -5,6 +5,7 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Camera } from '@ionic-native/camera';
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import { HttpClientModule } from '@angular/common/http';
 
 import { MyApp } from './app.component';
@@ -59,6 +60,7 @@ import { CreateAccountPage } from '../create-account/create-account';
     Geolocation,    
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     BandcochonProvider,
+    BackgroundGeolocation,
   ]
 })
 export class AppModule { }

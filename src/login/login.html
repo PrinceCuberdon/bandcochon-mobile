@@ -1,6 +1,4 @@
-
 <ion-header>
-
   <ion-navbar>
     <ion-title>Band cochon</ion-title>
   </ion-navbar>
@@ -9,7 +7,7 @@
 
 <ion-content padding>
   <div class="center">
-    <img class="centered-image" src="assets/imgs/logo.png"/>
+    <img class="centered-image" src="assets/imgs/logo.png" />
   </div>
 
   <ion-list>
@@ -23,13 +21,13 @@
       <ion-input type="password" placeholder="Votre mot de passe" [(ngModel)]="password"></ion-input>
     </ion-item>
   </ion-list>
-  <div>
-    <button ion-button  color="primary" block (click)="onLogin()">Connexion</button>
+  <div padding-top >
+    <button ion-button color="primary" block (click)="onLogin()">Connexion</button>
   </div>
-  <div>
-    <button ion-button color="" block (click)="onCreateAccount()">Création d'un compte</button>
+  <div padding-top >
+    <button ion-button  block (click)="onCreateAccount()">Création d'un compte</button>
   </div>
-  <div>
-    <button ion-button color="danger" block (click)="onPasswordForgotten()">Mot de passe oublié ?</button>
+  <div padding-top >
+    <button ion-button color="danger" block  (click)="onPasswordForgotten()">Mot de passe oublié ?</button>
   </div>
 </ion-content>
