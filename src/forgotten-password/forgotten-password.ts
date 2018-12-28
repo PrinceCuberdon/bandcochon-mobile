@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
 import { BandcochonProvider } from '../providers/bandcochon/bandcochon';
+import { Dialogs } from '@ionic-native/dialogs';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class ForgottenPasswordPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private bandcochon: BandcochonProvider,
-    private alertCtrl: AlertController,
+    private dialogs: Dialogs,
     private loadingCtrl: LoadingController) {
   }
 
@@ -71,23 +72,11 @@ export class ForgottenPasswordPage {
    * Display a more explicit error
    */
   private displayError(msg: string, title?: string): void {
-    this.alertCtrl
-      .create({
-        title: !!title ? title : "Erreur",
-        subTitle: msg,
-        "buttons": ["OK"],
-      })
-      .present();
+    this.dialogs.alert(msg, title || 'Erreur')
   }
 
   private displaySuccess(msg: string): Promise<any> {
-    return this.alertCtrl
-      .create({
-        title: "Succès",
-        subTitle: msg,
-        "buttons": ["OK"],
-      })
-      .present();
+    return this.dialogs.alert(msg, 'Succés')
   }
 
   private displayLoading(): Loading {

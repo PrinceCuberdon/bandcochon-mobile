@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, List } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
+import { Dialogs } from '@ionic-native/dialogs';
 import { BandcochonProvider } from '../providers/bandcochon/bandcochon';
 
 @Component({
@@ -13,7 +14,7 @@ export class CreateAccountPage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    private alertCtrl: AlertController,
+    private dialogs: Dialogs,
     private bandcochon: BandcochonProvider) {
   }
 
@@ -68,11 +69,7 @@ export class CreateAccountPage {
   }
 
 
-  private displayError(title: string, subTitle: string): Promise<any> {
-    return this.alertCtrl.create({
-      title: title,
-      subTitle: subTitle,
-      buttons: ["OK"]
-    }).present();
+  private displayError(title: string, message: string): Promise<any> {
+    return this.dialogs.alert(message, title);
   }
 }

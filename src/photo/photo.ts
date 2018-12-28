@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { ActionSheetController, AlertController, NavController, LoadingController } from 'ionic-angular';
+import { ActionSheetController, NavController, LoadingController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 
 import { BandcochonProvider } from "../providers/bandcochon/bandcochon";
+import { Dialogs } from '@ionic-native/dialogs';
 
 
 @Component({
@@ -21,7 +22,7 @@ export class PhotoPage {
     private geolocation: Geolocation,
     private actionSheetCtrl: ActionSheetController,
     private bandcochon: BandcochonProvider,
-    private alertCtrl: AlertController,
+    private dialogs: Dialogs,
     private loadingCtrl: LoadingController,
   ) { }
 
@@ -80,12 +81,8 @@ export class PhotoPage {
       });
   }
 
-  displayError(title: string, subTitle: string): void {
-    this.alertCtrl.create({
-      title: title,
-      subTitle: subTitle,
-      buttons: ['OK'],
-    })
+  displayError(title: string, message: string): void {
+    this.dialogs.alert(message,title);
   }
 
   /**
@@ -148,11 +145,7 @@ export class PhotoPage {
         (err) => {
           // Display error message
           loading.dismiss();
-          this.alertCtrl.create({
-            title: "Erreur",
-            subTitle: "Il fallait bien que ça merde " + err.message,
-            buttons: ['OK'],
-          }).present();
+          this.dialogs.alert("Impossible d'envoyer les images.", 'Erreur réseau');
         }
       );
 

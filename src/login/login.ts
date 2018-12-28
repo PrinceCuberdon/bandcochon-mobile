@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavController, NavParams, AlertController } from 'ionic-angular';
+import { LoadingController, NavController, NavParams } from 'ionic-angular';
 import { BandcochonProvider } from "../providers/bandcochon/bandcochon";
 import { TabsPage } from '../tabs/tabs';
 import { CreateAccountPage } from '../create-account/create-account';
 import { ForgottenPasswordPage } from '../forgotten-password/forgotten-password';
+import { Dialogs } from '@ionic-native/dialogs';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class LoginPage {
     public navParams: NavParams,
     private loadingCtrl: LoadingController,
     private bandcochon: BandcochonProvider,
-    private alertCtrl: AlertController) {
+    private dialogs: Dialogs) {
   }
 
   ionViewDidLoad() { }
@@ -37,11 +38,7 @@ export class LoginPage {
 
       // On error
       .catch((err) => {
-        this.alertCtrl.create({
-          title: "Erreur d'identifiant",
-          subTitle: "email ou mot de passe non reconnu.",
-          buttons: ['OK'],
-        }).present();
+        this.dialogs.alert("Email ou mot de passe non reconnu.", "Erreur d'identifiant"); 
       })
 
       // Always

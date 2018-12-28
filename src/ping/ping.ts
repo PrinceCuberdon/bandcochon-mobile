@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { AlertController, NavController, NavParams, Platform } from 'ionic-angular';
+import { NavController, NavParams, Platform } from 'ionic-angular';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { BandcochonProvider } from "../providers/bandcochon/bandcochon";
 import { LoginPage } from '../login/login';
 import { TabsPage } from '../tabs/tabs';
+import { Dialogs } from '@ionic-native/dialogs';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class PingPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public bandcochon: BandcochonProvider,
-    public alertCtrl: AlertController,
+    public dialogs: Dialogs,
     public platform: Platform,
     private geolocation: Geolocation,
   ) {
@@ -54,16 +55,9 @@ export class PingPage {
   }
 
   private displayErrorThenExit(msg: string): void {
-    this.alertCtrl.create({
-      title: "Erreur",
-      subTitle: msg,
-      buttons: [{
-        text: 'OK',
-        handler: (data) => {
-          this.platform.exitApp();
-        }
-      }]
-    }).present();
+    this.dialogs.alert(msg, 'Erreur')
+      .then(() => { this.platform.exitApp() })
+      .catch(() => { this.platform.exitApp() });
   }
 
   /**
@@ -104,7 +98,7 @@ export class PingPage {
         .subscribe((pos: Geoposition) => {
           if (pos['coords']) {
             subscription.unsubscribe();
-            
+
             const lat = pos.coords.latitude;
             const lng = pos.coords.longitude;
             this.loadingMessage = 'Position acquise.';
