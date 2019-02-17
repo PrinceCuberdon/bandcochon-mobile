@@ -15,7 +15,7 @@ interface Position {
 
 @Injectable()
 export class BandcochonProvider {
-  static ENDPOINT = 'http://192.168.1.20:8000/api/v1/';
+  static ENDPOINT = 'https://www.bandcochon.re/api/v1/';
   static IMAGES = BandcochonProvider.ENDPOINT + 'pictures/';
   static PING = BandcochonProvider.ENDPOINT + 'ping/';
   static LOGIN = BandcochonProvider.ENDPOINT + 'auth/login/';
@@ -183,9 +183,8 @@ export class BandcochonProvider {
   /**
    * Disconnect from service. Call the server then remove the token
    * 
-   * @returns {Promise<void>} A promise 
    */
-  logout() {
+  logout(): void {
     this.http.delete(BandcochonProvider.LOGOUT, { headers: { 'x-auth-token': this.token } })
       .subscribe(
         (value: ISimpleResponse) => {
@@ -193,6 +192,11 @@ export class BandcochonProvider {
         });
   }
 
+  /**
+   * Save the connection token for future use
+   * 
+   * @param token The connection token
+   */
   saveToken(token: string): void {
     this.token = token;
     localStorage.setItem('token', this.token);
