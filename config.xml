@@ -5,20 +5,27 @@
     <author email="contact@bandcochon.fr" href="https://www.bandcochon.re">L'association Band Cochon</author>
     <content src="index.html" />
     <access origin="*" />
+    
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+
+    <!-- Pluging preferences -->
     <preference name="ScrollEnabled" value="false" />
-    <preference name="android-minSdkVersion" value="26" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="FadeSplashScreenDuration" value="300" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3500" />
+
+    <!-- Android SDK -->
+    <preference name="android-minSdkVersion" value="26" />
+    <preference name="android-targetSdkVersion" value="28" />
+
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
@@ -100,5 +107,5 @@
         <variable name="CONTENT_AUTHORITY" value="$PACKAGE_NAME" />
     </plugin>
     <plugin name="cordova-plugin-dialogs" spec="2.0.1" />
-    <engine name="android" spec="7.1.4" />
+    <engine name="android" spec="8.0.0" />
 </widget>
