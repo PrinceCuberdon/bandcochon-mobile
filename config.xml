@@ -5,15 +5,12 @@
     <author email="contact@bandcochon.fr" href="https://www.bandcochon.re">L'association Band Cochon</author>
     <content src="index.html" />
     <access origin="*" />
-    
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
-
-    <!-- Pluging preferences -->
     <preference name="ScrollEnabled" value="false" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashMaintainAspectRatio" value="true" />
@@ -21,11 +18,8 @@
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3500" />
-
-    <!-- Android SDK -->
     <preference name="android-minSdkVersion" value="26" />
     <preference name="android-targetSdkVersion" value="28" />
-
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
@@ -99,13 +93,11 @@
     <plugin name="cordova-plugin-mauron85-background-geolocation" spec="~2.3.6">
         <variable name="GOOGLE_PLAY_SERVICES_VERSION" value="11+" />
         <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="23+" />
-        <variable name="ICON" value="@mipmap/icon" />
-        <variable name="SMALL_ICON" value="@mipmap/icon" />
         <variable name="ACCOUNT_NAME" value="@string/app_name" />
         <variable name="ACCOUNT_LABEL" value="@string/app_name" />
         <variable name="ACCOUNT_TYPE" value="$PACKAGE_NAME.account" />
         <variable name="CONTENT_AUTHORITY" value="$PACKAGE_NAME" />
     </plugin>
     <plugin name="cordova-plugin-dialogs" spec="2.0.1" />
-    <engine name="android" spec="8.0.0" />
+    <engine name="android" spec="7.1.4" />
 </widget>
